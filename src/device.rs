@@ -1,6 +1,7 @@
 use embedded_hal::i2c::{I2c, Operation};
 
 use crate::regs::RegisterTrait;
+use core::result::Result;
 
 pub struct BQ24296<I2C: I2c> {
     bus: I2C,
