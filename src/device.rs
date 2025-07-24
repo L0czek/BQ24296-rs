@@ -43,19 +43,32 @@ mod test {
 
     use super::BQ24296;
 
+    #[test]
     fn test_single_register() {
-        let expectations = [];
+        let expectations = [
+            I2cTransaction::write_read(
+                0x6b,
+                vec![InputSourceControlRegister::ADDRESS],
+                vec![0x00],
+            ),
+        ];
         let i2c = MockedI2C::new(expectations);
 
         let mut device = BQ24296::new(i2c);
         let r: InputSourceControlRegister = device.read().unwrap();
+        assert_eq!(Into::<[u8; 1]>::into(r), [0x00]);
     }
 
+    #[test]
     fn test_register_sets() {
-        let expectations = [];
+        let expectations = [
+            I2cTransaction::write_read(0x6b, vec![ConfigurationRegisters::ADDRESS], vec![0x00; 8]),
+        ];
         let i2c = MockedI2C::new(expectations);
 
         let mut device = BQ24296::new(i2c);
         let r: ConfigurationRegisters = device.read().unwrap();
+        let bytes: [u8; 8] = r.into();
+        assert_eq!(bytes, [0x00; 8]);
     }
 }
