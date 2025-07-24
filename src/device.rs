@@ -40,19 +40,18 @@ mod test {
 
     use crate::ConfigurationRegisters;
     use crate::InputSourceControlRegister;
+    use crate::regs::RegisterAddress;
 
     use super::BQ24296;
 
     #[test]
     fn test_single_register() {
-        let expectations = [
-            I2cTransaction::write_read(
-                0x6b,
-                vec![InputSourceControlRegister::ADDRESS],
-                vec![0x00],
-            ),
-        ];
-        let i2c = MockedI2C::new(expectations);
+        let expectations = [I2cTransaction::write_read(
+            0x6b,
+            vec![InputSourceControlRegister::ADDRESS],
+            vec![0x00],
+        )];
+        let i2c = MockedI2C::new(&expectations);
 
         let mut device = BQ24296::new(i2c);
         let r: InputSourceControlRegister = device.read().unwrap();
@@ -62,9 +61,13 @@ mod test {
     #[test]
     fn test_register_sets() {
         let expectations = [
-            I2cTransaction::write_read(0x6b, vec![ConfigurationRegisters::ADDRESS], vec![0x00; 8]),
+            I2cTransaction::write_read(
+                0x6b,
+                vec![ConfigurationRegisters::ADDRESS],
+                vec![0x00; 8],
+            ),
         ];
-        let i2c = MockedI2C::new(expectations);
+        let i2c = MockedI2C::new(&expectations);
 
         let mut device = BQ24296::new(i2c);
         let r: ConfigurationRegisters = device.read().unwrap();
