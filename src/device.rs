@@ -32,9 +32,6 @@ impl<I2C: I2c> BQ24296<I2C> {
         self.write(register)
     }
 
-    pub fn destroy(self) -> I2C {
-        self.bus
-    }
 }
 
 #[cfg(test)]
