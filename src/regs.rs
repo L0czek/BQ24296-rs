@@ -1,7 +1,8 @@
 #![allow(non_snake_case, non_camel_case_types)]
 use bitfields::bitfield;
+use defmt::Format;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum InputCurrentLimit {
     mA_100 = 0,
     mA_150 = 1,
@@ -28,7 +29,7 @@ impl InputCurrentLimit {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum VbusStatus {
     Unknown = 0,
     UsbHost = 1,
@@ -36,7 +37,7 @@ pub enum VbusStatus {
     Otg = 3,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum ChargeStatus {
     NotCharging = 0,
     PreCharge = 1,
@@ -44,7 +45,7 @@ pub enum ChargeStatus {
     ChargeDone = 3,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum ChargeFaultStatus {
     Normal = 0,
     InputFault = 1,
@@ -52,7 +53,7 @@ pub enum ChargeFaultStatus {
     ChargeTimerExpired = 3,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum NtcFaultStatus {
     Normal = 0,
     Cold = 1,
@@ -60,7 +61,7 @@ pub enum NtcFaultStatus {
     ColdAndHot = 3,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum WatchdogTimer {
     Disabled = 0,
     Seconds40 = 1,
@@ -79,7 +80,7 @@ impl WatchdogTimer {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum ChargeTimer {
     Hours5 = 0,
     Hours8 = 1,
@@ -98,7 +99,7 @@ impl ChargeTimer {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum ThermalRegulationThreshold {
     Celsius60 = 0,
     Celsius80 = 1,
@@ -117,7 +118,7 @@ impl ThermalRegulationThreshold {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum BoostHotThreshold {
     Celsius55 = 0, // Vbhot1
     Celsius60 = 1, // Vbhot0
@@ -125,7 +126,7 @@ pub enum BoostHotThreshold {
     Disabled = 3,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum BoostCurrentLimit {
     mA_1000 = 0,
     mA_1500 = 1,
@@ -140,7 +141,7 @@ impl BoostCurrentLimit {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum BatteryLowVoltageThreshold {
     mV_2800 = 0,
     mV_3000 = 1,
@@ -155,7 +156,7 @@ impl BatteryLowVoltageThreshold {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
 pub enum BatteryRechargeThreshold {
     mV_100 = 0,
     mV_300 = 1,
@@ -196,7 +197,7 @@ macro_rules! impl_simple_register_traits {
 }
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct InputSourceControlRegister {
     #[bits(3)]
     IINLIM: u8,
@@ -250,7 +251,7 @@ impl InputSourceControlRegister {
 impl_simple_register_traits!(InputSourceControlRegister, 0);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct PowerOnConfigurationRegister {
     #[bits(1)]
     BOOST_LIM: u8,
@@ -333,7 +334,7 @@ impl PowerOnConfigurationRegister {
 impl_simple_register_traits!(PowerOnConfigurationRegister, 1);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct ChargeCurrentControlRegister {
     #[bits(1)]
     FORCE_20PCT: u8,
@@ -379,7 +380,7 @@ impl ChargeCurrentControlRegister {
 impl_simple_register_traits!(ChargeCurrentControlRegister, 2);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct PreChargeTerminationCurrentControlRegister {
     #[bits(3)]
     ITERM: u8,
@@ -414,7 +415,7 @@ impl PreChargeTerminationCurrentControlRegister {
 impl_simple_register_traits!(PreChargeTerminationCurrentControlRegister, 3);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct ChargeVoltageControlRegister {
     #[bits(1)]
     VRECHG: u8,
@@ -470,7 +471,7 @@ impl ChargeVoltageControlRegister {
 impl_simple_register_traits!(ChargeVoltageControlRegister, 4);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct ChargeTerminationTimerControlRegister {
     #[bits(1, default = 0)]
     _reserved: u8,
@@ -554,7 +555,7 @@ impl ChargeTerminationTimerControlRegister {
 impl_simple_register_traits!(ChargeTerminationTimerControlRegister, 5);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct BoostVoltageThermalRegulationRegister {
     #[bits(2)]
     TREG: u8,
@@ -610,7 +611,7 @@ impl BoostVoltageThermalRegulationRegister {
 impl_simple_register_traits!(BoostVoltageThermalRegulationRegister, 6);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct MiscOperationControlRegister {
     #[bits(2)]
     INT_MASK: u8,
@@ -685,7 +686,7 @@ impl MiscOperationControlRegister {
 impl_simple_register_traits!(MiscOperationControlRegister, 7);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct SystemStatusRegister {
     #[bits(1)]
     VSYS_STAT: u8,
@@ -745,7 +746,7 @@ impl SystemStatusRegister {
 impl_simple_register_traits!(SystemStatusRegister, 8);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct NewFaultRegister {
     #[bits(2)]
     NTC_FAULT: u8,
@@ -809,7 +810,7 @@ impl NewFaultRegister {
 impl_simple_register_traits!(NewFaultRegister, 9);
 
 #[bitfield(u8, from = true, debug = true)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Format)]
 pub struct VendorPartRevisionRegister {
     #[bits(3)]
     REV: u8,
@@ -881,7 +882,7 @@ macro_rules! impl_register_traits_for_sets {
     };
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, Format)]
 pub struct ConfigurationRegisters {
     pub ISCR: InputSourceControlRegister,
     pub POCR: PowerOnConfigurationRegister,
@@ -906,7 +907,7 @@ impl_register_traits_for_sets!(
     MOCR
 );
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, Format)]
 pub struct StatusRegisters {
     pub SSR: SystemStatusRegister,
     pub NFR: NewFaultRegister,
